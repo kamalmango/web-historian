@@ -80,31 +80,6 @@ exports.downloadUrls = function(urls) {
   }); 
 };
 
-  // http.get('http://' + url, function(res) {
-  //   var allData = '';
-  //   res.on('data', function(data) {
-  //     allData += data.toString();
-  //   }).on('end', function() {
-  //     fs.writeFile(file, allData, function(err) {
-  //       if (err) {
-  //         throw error;
-  //       }
-  //     });
-  //   });
-  // });
-
-
-
-
-  // urls.forEach(function(url) {
-  //   request.get(path.join('http://', url), function(err, response, data) {
-  //     fs.appendFile(path.join(this.paths.archivedSites, '/url'), data, function(error) {
-  //       if (error) {
-  //         throw error;
-  //       }
-  //     });
-  //   });
-  // }); 
 
 
 
