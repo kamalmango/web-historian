@@ -53,12 +53,35 @@ exports.handleRequest = function (req, res) {
         data += chunk;
       });
       req.on('end', function() {
-        fs.appendFile(archive.paths.list, data.replace('url=', '') + '\n', function(error) {
-          if (error) {
-            throw error;
+        var url = data.replace('url=', '') + '\n';
+        // use add url to list instead
+        archive.isUrlInList(url, function(result) {
+          if (!result) {
+            fs.appendFile(archive.paths.list, url, function(error) {
+              if (error) {
+                throw error;
+              } else {
+                res.writeHead(302, helpers.head);
+                res.end('posted');
+              }
+            });
           } else {
-            res.writeHead(302, helpers.head);
-            res.end();
+            archive.isUrlArchived(url, function(result) {
+              if (!result) {
+                fs.readFile(path.join(archive.paths.siteAssets, '/loading.html'), 'utf8', function(err, data) {
+                  res.writeHead(200, helpers.headers);
+                  res.end(data);
+                });
+              } else {
+                console.log('-----------ARCHIVED');
+                url = url.replace('\n', '');
+                console.log(path.join(archive.paths.archivedSites, url));
+                fs.readFile(path.join(archive.paths.archivedSites, url), 'utf8', function(err, data) {
+                  res.writeHead(200, helpers.headers);
+                  res.end(data);
+                });
+              }
+            });
           }
         });
       });

@@ -34,6 +34,7 @@ exports.readListOfUrls = function(cb) {
 };
 
 exports.isUrlInList = function(url, cb) {
+  url = url.replace('\n', '');
   this.readListOfUrls(function(items) {
     var result = false;
     items.forEach(function(item) {
@@ -56,10 +57,12 @@ exports.addUrlToList = function(url, cb) {
 };
 
 exports.isUrlArchived = function(url, cb) {
+  url = url.replace('\n', '');
   fs.readdir(this.paths.archivedSites, function(err, files) {
     var results = false;
     files.forEach(function(file) {
       if (file === url) {
+        console.log('they are equal');
         results = true;
       }
     });
@@ -69,11 +72,13 @@ exports.isUrlArchived = function(url, cb) {
 
 exports.downloadUrls = function(urls) {
   var context = this;
+  console.log(urls);
   urls.forEach(function(url) {
     request.get('http://'+url, function(err, response, data) {
       fs.appendFile(path.join(context.paths.archivedSites, url), data, function(error) {
         if (error) {
-          throw error;
+          //throw error;
+          console.log('error');
         }
       });
     });
